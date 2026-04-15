@@ -147,8 +147,12 @@ install_hermes() {
     sudo apt-get install -y -qq python3 python3-pip python3-venv >> "$LOG_FILE" 2>&1
 
     # Install Hermes Agent via official installer
+    # IMPORTANT: Do NOT redirect output - installer is interactive!
     log "Downloading Hermes Agent installer..."
-    if curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash >> "$LOG_FILE" 2>&1; then
+    log "NOTE: The installer may ask for input. Please respond to any prompts."
+    echo ""
+    
+    if curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash; then
         # Reload shell to pick up hermes command
         export PATH="$HOME/.local/bin:$PATH"
         
@@ -162,12 +166,13 @@ install_hermes() {
     else
         # Fallback: try pip installation
         log "Trying pip installation..."
-        pip3 install hermes-agent >> "$LOG_FILE" 2>&1 \
-            || warn "Hermes Agent installation via pip also failed."
+        pip3 install hermes-agent 2>&1 || warn "Hermes Agent installation via pip also failed."
         warn "You may need to install Hermes Agent manually."
         warn "Visit: https://github.com/NousResearch/hermes-agent"
     fi
 
+    echo ""
+    
     # Also install Node.js for potential future use (optional but useful)
     node_version=$(node --version 2>/dev/null | tr -d 'v' | cut -d. -f1 || echo "0")
     if (( node_version < 18 )); then
