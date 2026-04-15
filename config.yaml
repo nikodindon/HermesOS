@@ -1,0 +1,79 @@
+# HermesOS — Hermes Agent configuration
+# Place this file at: ~/.hermes/config.yaml
+# Documentation: https://github.com/NousResearch/hermes-agent
+
+# ─── Model provider ───────────────────────────────────────────────────────────
+# Choose your provider. Uncomment ONE block.
+
+# Option A: Local via Ollama (recommended for privacy)
+provider: ollama
+model: qwen2.5-coder:32b   # or: llama3.1:70b, gemma3:27b, deepseek-coder-v2
+base_url: http://localhost:11434
+
+# Option B: Anthropic API (best quality for complex tasks)
+# provider: anthropic
+# model: claude-sonnet-4-20250514
+# api_key: ${ANTHROPIC_API_KEY}
+
+# Option C: OpenAI-compatible (GLM, etc.)
+# provider: openai
+# model: glm-4-plus
+# base_url: https://open.bigmodel.cn/api/paas/v4
+# api_key: ${GLM_API_KEY}
+
+# ─── Memory and learning ──────────────────────────────────────────────────────
+memory:
+  enabled: true
+  nudge_interval: 15       # Check for memorable events every N interactions
+  max_memory_chars: 2200   # Keep MEMORY.md under this limit
+  max_user_chars: 1375     # Keep USER.md under this limit
+  compression: true        # Compress when hitting limits
+
+# ─── Skills ──────────────────────────────────────────────────────────────────
+skills:
+  auto_create: true        # Automatically create skills after complex tasks
+  auto_improve: true       # Improve existing skills when better approaches found
+  skill_threshold: 5       # Min tool calls before skill creation is considered
+  always_load: []          # Skills to always include in context (by name)
+
+# ─── Execution environment ────────────────────────────────────────────────────
+execution:
+  backend: local           # local | docker | ssh
+  allowed_commands:        # Commands Hermes can run without asking
+    - git
+    - ls
+    - cat
+    - find
+    - grep
+    - curl
+    - python3
+    - node
+    - npm
+    - docker
+    - systemctl
+    - apt
+    - mpd
+    - mpc
+    - cmus
+    - mpv
+  confirm_destructive: true   # Ask before rm, mv on important files
+
+# ─── Media integration ────────────────────────────────────────────────────────
+media:
+  music_player: mpd          # mpd | cmus
+  music_dir: ~/Music
+  video_player: mpv
+  mpv_options: "--vo=drm"    # Console playback without X
+
+# ─── Interface ────────────────────────────────────────────────────────────────
+interface:
+  theme: dark
+  show_tool_calls: false     # Show raw tool calls (true = verbose)
+  compact_mode: false
+  session_summary: true      # Show summary when resuming a session
+
+# ─── Autonomous features (optional) ──────────────────────────────────────────
+autonomous:
+  enabled: false             # Enable background autonomous tasks
+  morning_briefing: false    # Daily summary at startup
+  auto_backup: false         # Periodic backup of important files

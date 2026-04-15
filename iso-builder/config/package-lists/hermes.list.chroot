@@ -1,0 +1,116 @@
+# HermesOS Core Packages
+# This file lists packages to install in the live ISO
+
+# ─── Base system ──────────────────────────────────────────────────────────────
+git
+curl
+wget
+unzip
+build-essential
+software-properties-common
+apt-transport-https
+ca-certificates
+gnupg
+lsb-release
+
+# ─── Console & Terminal ───────────────────────────────────────────────────────
+tmux
+screen
+htop
+btop
+neofetch
+console-setup
+fonts-terminus
+kitty
+
+# ─── Development ──────────────────────────────────────────────────────────────
+neovim
+helix
+python3
+python3-pip
+python3-venv
+nodejs
+npm
+docker.io
+docker-compose
+git
+tig
+ripgrep
+fd-find
+bat
+jq
+sqlite3
+fzf
+
+# ─── File Management ──────────────────────────────────────────────────────────
+ranger
+nnn
+ncdu
+tree
+
+# ─── Media (Console) ──────────────────────────────────────────────────────────
+cmus
+mpd
+mpc
+ncmpcpp
+mpv
+ffmpeg
+chafa
+youtube-dl
+yt-dlp
+
+# ─── Networking ───────────────────────────────────────────────────────────────
+network-manager
+wireless-tools
+wpasupplicant
+iw
+nmap
+curl
+wget
+w3m
+lynx
+
+# ─── Hardware & Power ────────────────────────────────────────────────────────
+tlp
+tlp-rdw
+acpi
+acpid
+lm-sensors
+hdparm
+smartmontools
+
+# ─── Audio ────────────────────────────────────────────────────────────────────
+pulseaudio
+pulseaudio-utils
+alsa-utils
+pavucontrol
+
+# ─── Firmware (for broad hardware support) ───────────────────────────────────
+linux-firmware
+firmware-linux
+firmware-linux-nonfree
+firmware-iwlwifi
+firmware-realtek
+firmware-brcm80211
+firmware-atheros
+
+# ─── System Tools ─────────────────────────────────────────────────────────────
+systemd-sysv
+dbus
+polkitd
+udisks2
+udisks2-btrfs
+btrfs-progs
+
+# ─── Boot & Installer ────────────────────────────────────────────────────────
+grub-pc
+grub-efi-amd64
+grub-efi-amd64-signed
+shim-signed
+mtools
+parted
+gparted
+dosfstools
+ntfs-3g
+exfat-fuse
+exfat-utils
