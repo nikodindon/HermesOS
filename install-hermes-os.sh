@@ -142,19 +142,39 @@ EOF
 install_hermes() {
     log "Installing Hermes Agent..."
 
-    # Check if Node.js 18+ is available
-    node_version=$(node --version 2>/dev/null | tr -d 'v' | cut -d. -f1 || echo "0")
-    if (( node_version < 18 )); then
-        log "Installing Node.js 20 LTS..."
-        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - >> "$LOG_FILE" 2>&1
-        sudo apt-get install -y nodejs >> "$LOG_FILE" 2>&1
+    # Hermes Agent is a Python project, not npm
+    # Install Python dependencies first
+    sudo apt-get install -y -qq python3 python3-pip python3-venv >> "$LOG_FILE" 2>&1
+
+    # Install Hermes Agent via official installer
+    log "Downloading Hermes Agent installer..."
+    if curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash >> "$LOG_FILE" 2>&1; then
+        # Reload shell to pick up hermes command
+        export PATH="$HOME/.local/bin:$PATH"
+        
+        # Check if hermes is available
+        if command -v hermes &>/dev/null; then
+            success "Hermes Agent installed successfully"
+        else
+            warn "Hermes installed but not in PATH. You may need to restart your shell."
+            warn "Run: source ~/.bashrc"
+        fi
+    else
+        # Fallback: try pip installation
+        log "Trying pip installation..."
+        pip3 install hermes-agent >> "$LOG_FILE" 2>&1 \
+            || warn "Hermes Agent installation via pip also failed."
+        warn "You may need to install Hermes Agent manually."
+        warn "Visit: https://github.com/NousResearch/hermes-agent"
     fi
 
-    # Install Hermes via npm
-    npm install -g @nousresearch/hermes-agent >> "$LOG_FILE" 2>&1 \
-        || die "Failed to install Hermes Agent. Check your Node.js version and npm access."
-
-    success "Hermes Agent installed: $(hermes --version 2>/dev/null || echo 'version unknown')"
+    # Also install Node.js for potential future use (optional but useful)
+    node_version=$(node --version 2>/dev/null | tr -d 'v' | cut -d. -f1 || echo "0")
+    if (( node_version < 18 )); then
+        log "Installing Node.js 20 LTS (optional)..."
+        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - >> "$LOG_FILE" 2>&1
+        sudo apt-get install -y nodejs >> "$LOG_FILE" 2>&1 || true
+    fi
 }
 
 # ─── Hermes wrapper shell ─────────────────────────────────────────────────────

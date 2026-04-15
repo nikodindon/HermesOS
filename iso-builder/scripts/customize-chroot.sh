@@ -20,12 +20,16 @@ create_user() {
 install_hermes() {
     log "Installing Hermes Agent..."
 
-    # Node.js 20 LTS
+    # Hermes Agent is a Python project
+    # Install Python dependencies
+    apt-get install -y python3 python3-pip python3-venv
+
+    # Install Hermes Agent via official installer
+    curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+
+    # Also install Node.js for potential future use
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
     apt-get install -y nodejs
-
-    # Hermes Agent
-    npm install -g @nousresearch/hermes-agent
 
     # Create hermes directories
     mkdir -p "$HERMES_HOME/.hermes/skills"
